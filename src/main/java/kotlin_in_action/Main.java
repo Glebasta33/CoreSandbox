@@ -10,5 +10,10 @@ public class Main {
         System.out.println(person.isMarried());
         person.setMarried(true);
         System.out.println(person.isMarried());
+
+        //цикл на Java:
+        for (int i = 0; i < 100; i++) {
+            System.out.println(i);
+        }
     }
 }
