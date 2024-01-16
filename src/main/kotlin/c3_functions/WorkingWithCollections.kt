@@ -1,4 +1,4 @@
-package functions
+package c3_functions
 /**
  * # Kotlin в действии.
  * ## 3.5 Определение и вызов функций. Работа с коллекциями.

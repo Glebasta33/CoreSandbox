@@ -1,4 +1,4 @@
-package basics
+package c2_basics
 
 import kotlin_in_action.JavaPerson
 

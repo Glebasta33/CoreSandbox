@@ -1,4 +1,4 @@
-package functions
+package c3_functions
 
 /**
  * # Kotlin в действии.

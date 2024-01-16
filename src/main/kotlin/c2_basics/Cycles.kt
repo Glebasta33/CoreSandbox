@@ -1,4 +1,4 @@
-package basics
+package c2_basics
 
 import java.util.TreeMap
 
