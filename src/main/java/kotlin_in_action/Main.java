@@ -16,4 +16,17 @@ public class Main {
             System.out.println(i);
         }
     }
+
+    // Если внутри метода не обработать checked-exception обязательно нужно пометить метод:
+    private void throwException() throws Exception {
+        throw new Exception();
+    }
+
+    private void handleException() {
+        try {
+            throw new Exception();
+        } catch (Exception e) {
+            System.out.println(e.getMessage());
+        }
+    }
 }
