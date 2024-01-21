@@ -74,12 +74,10 @@ fun main() {
      * Есть чисто функции чисто составных операторов: += -> plusAssign, -+ -> minusAssign.
      * Такие функции не возвращают новых значений, но могут изменить мутабельный объект.
      */
-    data class MutablePoint(var x: Int, var y: Int)
     operator fun MutablePoint.plusAssign(other: MutablePoint) {
         x += other.x
         y += other.y
     }
-
     val mutablePoint = MutablePoint(1, 2)
     mutablePoint += MutablePoint(3, 4) // работает с val, тк мутабельный
     println(mutablePoint) // MutablePoint(x=4, y=6)
@@ -127,3 +125,5 @@ fun main() {
 
     println("abc" < "bac") // true <- String реализует Comparable.
 }
+
+data class MutablePoint(var x: Int, var y: Int)
