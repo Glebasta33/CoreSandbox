@@ -92,4 +92,38 @@ fun main() {
     bd++
     println(bd) // 1
 
+    /**
+     * ## 7.2. Перегрузка операторов сравнения.
+     *
+     * Оператор сравнения "==" ("!=") уже реализован в Any с ключевым словом "operator",
+     * поэтому каждый объект подлежит сравнению через эти операторы.
+     */
+    data class EqualsExample(val id: String) {
+        override fun equals(other: Any?): Boolean {
+            println("equals called")
+            if (other === this) return true
+            if (other !is EqualsExample) return false
+            return id == other.id
+        }
+    }
+    println(EqualsExample("a") == EqualsExample("a")) // equals called, true
+
+    /**
+     * Операторы отношения: compareTo.
+     *
+     * Интерфейс [Comparable] используется в алгоритмах сравнения значения (поиск максимума, сортировка).
+     * Метод compareTo возвращает Int. "p1 < p2" == "p1.compareTo(p2) < 0"
+     * В Kotlin compareTo может вызываться операторами сравнения (>, <, <=, >=).
+     */
+    class Person(
+        val firstName: String, val lastName: String
+    ) : Comparable<Person> {
+        override fun compareTo(other: Person): Int { // как и в случае с equals, "operator" уже применён к функции в интерфейсе
+            return compareValuesBy(this, other, Person::lastName, Person::firstName)
+        }
+    }
+
+    println(Person("Alice", "Smith") < Person("Bob", "Johnson")) // false
+
+    println("abc" < "bac") // true <- String реализует Comparable.
 }
