@@ -30,11 +30,17 @@ class Client(val name: String, val postalCode: Int) {
  * Это альтернатива изменению полей объекта mutable класса, и хорошо подходит для immutable классов.
  * Копия имеет свой жизненный цикл и не влияет на код, ссылающийся на исходный экземпляр.
  */
-data class DataClient(val name: String, val postalCode: Int)
+data class DataClient(val name: String, val postalCode: Int) {
+    var _x: Int = 0
+    constructor(x: Int, name: String, postalCode: Int) : this(name, postalCode) {
+        _x = x
+    }
+}
 
 fun main() {
-    var client = DataClient("Mike", 1234)
+    var client = DataClient(10,"Mike", 1234)
     client = client.copy(postalCode = 4321)
+//    client = client.copy(x = ) //ERROR
 
     val delegatingArrayList = DelegatingArrayList<String>("one", "two", "three")
     println(delegatingArrayList.size)
@@ -45,7 +51,7 @@ fun main() {
 
     val countingSet = CountingSet<Int>()
     countingSet.addAll(listOf(1,1,2))
-    println("Added: ${countingSet.objectsAdded}, size: ${countingSet.size}")
+    println("Added: ${countingSet.objectsAdded}, size: ${countingSet.size}") // Added: 3, size: 2
 }
 
 /**

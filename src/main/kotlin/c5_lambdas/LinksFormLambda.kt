@@ -7,6 +7,7 @@ import с4_class_interface.Person
  *
  * Очень часто приходится решать задачу передачи некоторого поведения в коде.
  * В Java (до 8 версии) такие задачи решались с помощью анонимных внутренних классов:
+ *
  *         button.setOnClickListener(new OnClickListener() {
  *             @Override
  *             public void onClick() {
@@ -54,6 +55,8 @@ fun main() {
     }
     val errors = listOf("403 Forbidden", "404 Not Found")
     printMessagesWithPrefix(errors, "Error:")
+    //Error: 403 Forbidden
+    //Error: 404 Not Found
 
     /**
      * В Java подобный доступ был возможен только к финальным переменным (её значение просто копировалось).
