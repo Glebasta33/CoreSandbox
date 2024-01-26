@@ -5,6 +5,9 @@ import java.lang.reflect.Type
 import kotlin.reflect.KAnnotatedElement
 import kotlin.reflect.KClass
 
+/**
+ * KAnnotatedElement имеет свойство annotations, по которому можно получить все аннотации, указанные к классу.
+ */
 inline fun <reified T> KAnnotatedElement.findAnnotation(): T?
         = annotations.filterIsInstance<T>().firstOrNull()
 
