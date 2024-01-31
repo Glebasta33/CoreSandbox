@@ -23,6 +23,9 @@ fun <T: Any> deserialize(json: Reader, targetClass: KClass<T>): T {
     return seed.spawn()
 }
 
+/**
+ * Объект или массива, которые десериализуется в данный момент.
+ */
 interface JsonObject {
     fun setSimpleProperty(propertyName: String, value: Any?)
 
@@ -31,9 +34,16 @@ interface JsonObject {
     fun createArray(propertyName: String): JsonObject
 }
 
+/**
+ * Универсальная реализация паттерна Builder.
+ */
 interface Seed: JsonObject {
     val classInfoCache: ClassInfoCache
 
+    /**
+     * spawn ("прорастить") возвращает созданный экземпляр по окончании процесса конструирования.
+     * (аналог метода build).
+     */
     fun spawn(): Any?
 
     fun createCompositeProperty(propertyName: String, isList: Boolean): JsonObject
@@ -61,10 +71,15 @@ fun Seed.createSeedForType(paramType: Type, isList: Boolean): Seed {
     return ObjectSeed(paramClass.kotlin, classInfoCache)
 }
 
-
+/**
+ * Для конструирования объекта используются данные в параметрах конструктора.
+ * При конструировании используются 2 словаря:
+ * - valueArguments - для простых значений. setSimpleProperty - добавляет новые значения в словарь.
+ * - seedArguments - для составных значений. createCompositeProperty - добавляет новые значения.
+ */
 class ObjectSeed<out T: Any>(
     targetClass: KClass<T>,
-    override val classInfoCache: ClassInfoCache
+    override val classInfoCache: ClassInfoCache //<- создаёт объекты с использованием рефлексии.
 ) : Seed {
 
     private val classInfo: ClassInfo<T> = classInfoCache[targetClass]
@@ -73,7 +88,7 @@ class ObjectSeed<out T: Any>(
     private val seedArguments = mutableMapOf<KParameter, Seed>()
 
     private val arguments: Map<KParameter, Any?>
-        get() = valueArguments + seedArguments.mapValues { it.value.spawn() }
+        get() = valueArguments + seedArguments.mapValues { it.value.spawn() } //<-рекурсия
 
     override fun setSimpleProperty(propertyName: String, value: Any?) {
         val param = classInfo.getConstructorParameter(propertyName)
@@ -88,7 +103,7 @@ class ObjectSeed<out T: Any>(
         return seed.apply { seedArguments[param] = this }
     }
 
-    override fun spawn(): T = classInfo.createInstance(arguments)
+    override fun spawn(): T = classInfo.createInstance(arguments) //<- создание экземпляра targetClass с передачей словаря аргументов.
 }
 
 class ObjectListSeed(

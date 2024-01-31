@@ -8,14 +8,22 @@ import kotlin.reflect.full.declaredMemberProperties
 import kotlin.reflect.full.primaryConstructor
 import kotlin.reflect.jvm.javaType
 
+/**
+ * Цель класса - уменьшить накладные расходы, связанные с использованием механизма рефлексии.
+ * Выполнение поиска параметров конструктора для каждого объекта замедлит процесс десериализации,
+ * поэтому мы делаем это только 1 раз для каждого класса и сохраняем информацию в кэше.
+ */
 class ClassInfoCache {
-    private val cacheData = mutableMapOf<KClass<*>, ClassInfo<*>>()
-
+    private val cacheData = mutableMapOf<KClass<*>, ClassInfo<*>>() //<- мы удаляем информацию о типе, когда сохраняем значения в словаре
+    //но реализация get гарантирует, что возвращаемый KClass<T> имеет правильный аргумент типа:
     @Suppress("UNCHECKED_CAST")
     operator fun <T : Any> get(cls: KClass<T>): ClassInfo<T> =
-        cacheData.getOrPut(cls) { ClassInfo(cls) } as ClassInfo<T>
+        cacheData.getOrPut(cls) { ClassInfo(cls) } as ClassInfo<T>//<- getOrPut получает значение, либо, если его нет, вызывает лямбду, чтобы создать новое (ClassInfo)
 }
 
+/**
+ * Класс отвечает за создание нового экземпляра целевого класса и кэширование необходимой информации.
+ */
 class ClassInfo<T : Any>(cls: KClass<T>) {
     private val className = cls.qualifiedName
     private val constructor = cls.primaryConstructor
@@ -25,6 +33,9 @@ class ClassInfo<T : Any>(cls: KClass<T>) {
     private val paramToSerializerMap = hashMapOf<KParameter, ValueSerializer<out Any?>>()
     private val jsonNameToDeserializeClassMap = hashMapOf<String, Class<out Any>?>()
 
+    /**
+     * Код отыскивает свойства, соответствующие параметрам конструктора, и извлекает из аннотации.
+     */
     init {
         constructor.parameters.forEach { cacheDataForParameter(cls, it) }
     }
@@ -69,6 +80,17 @@ class ClassInfo<T : Any>(cls: KClass<T>) {
         }
     }
 
+    /**
+     * Метод KCallable.call позволяет вызывать функцию или конструктор (но он не поддерживает именованные аргументы).
+     * Метод KCallable.callBy - осуществляет поддержку именованных аргументов:
+     *
+     *      interface KCallable<out R> : KAnnotatedElement {
+     *          fun callBy(args: Map<KParameter, Any?>): R
+     *          ...
+     *      }
+     *
+     * callBy позволяет вызывать конструктор и передавать ему словарь с параметрами и соответствующими значениями (важен порядок и тип).
+     */
     fun createInstance(arguments: Map<KParameter, Any?>): T {
         ensureAllParametersPresent(arguments)
         return constructor.callBy(arguments)
