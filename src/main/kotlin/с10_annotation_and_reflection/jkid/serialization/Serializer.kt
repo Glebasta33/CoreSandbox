@@ -2,8 +2,7 @@ package с10_annotation_and_reflection.jkid.serialization
 
 import с10_annotation_and_reflection.jkid.*
 import с10_annotation_and_reflection.jkid.exercise.DateFormat
-import java.text.SimpleDateFormat
-import java.util.*
+import с10_annotation_and_reflection.jkid.exercise.DateSerializer
 import kotlin.reflect.KProperty
 import kotlin.reflect.KProperty1
 import kotlin.reflect.full.findAnnotation
@@ -61,17 +60,17 @@ private fun StringBuilder.serializeProperty(
     serializeString(propName)
     append(": ")
 
-    var value = prop.get(obj) //<- Получение значения свойства
-
-    prop.findAnnotation<DateFormat>()?.let { jsonDateAnn ->
-        value = serializeDate(jsonDateAnn, value)
-    }
-
+    val value = prop.get(obj) //<- Получение значения свойства
     val jsonValue = prop.getSerializer()?.toJsonValue(value) ?: value //<- Проверка на наличие кастомного сериализатора
     serializePropertyValue(jsonValue)
 }
 
 fun KProperty<*>.getSerializer(): ValueSerializer<Any?>? {
+    val dateFormatAnn = findAnnotation<DateFormat>()
+    if (dateFormatAnn != null) {
+        return DateSerializer(dateFormatAnn.format) as ValueSerializer<Any?>
+    }
+
     val customSerializerAnn = findAnnotation<CustomSerializer>() ?: return null
     val serializerClass = customSerializerAnn.serializerClass //<- получение типа кастомного сериализатора
 
@@ -95,6 +94,7 @@ private fun StringBuilder.serializePropertyValue(value: Any?) {
         is String -> serializeString(value)
         is Number, is Boolean -> append(value.toString())
         is List<*> -> serializeList(value)
+        is Map<*, *> -> serializeMap(value)
         else -> serializeObject(value)
     }
 }
@@ -105,14 +105,19 @@ private fun StringBuilder.serializeList(data: List<Any?>) {
     }
 }
 
+private fun StringBuilder.serializeMap(data: Map<*, *>) {
+    data.toList().joinToStringBuilder(this, prefix = "{", postfix = "}") { entry ->
+        val (key, value) = entry
+        serializeString(key.toString())
+        append(": ")
+        serializePropertyValue(value)
+    }
+}
+
 private fun StringBuilder.serializeString(s: String) {
     append('\"')
     s.forEach { append(it.escape()) }
     append('\"')
-}
-
-private fun serializeDate(jsonDateAnn: DateFormat, value: Any?): Any? {
-    return SimpleDateFormat(jsonDateAnn.format).format(value as Date)
 }
 
 private fun Char.escape(): Any =
