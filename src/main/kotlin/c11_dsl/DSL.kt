@@ -176,7 +176,7 @@ fun e3() {
                 tr {
                     // При этом получатель внешнего лямбда-выражения останется доступным во вложенных (можно ограничить доступность аннотацией @DslMarker).
                     this@table.name
-                    td {  }
+                    td { }
                 }
             }
 
@@ -195,8 +195,74 @@ fun e3() {
     ) // <table><tr><td><p>Hello World!</p></td></tr></table>
 }
 
+/**
+ * ## 11.3. Гибкое вложение блоков с использованием соглашения "invoke"
+ * Соглашение invoke позволяет вызывать объекты как функции.
+ *
+ * Это же соглашение позволяет вызывать лямбды: lambda.invoke() -> lambda().
+ * invoke - метод интерфейса FunctionN.
+ */
+class Greeter(val greeting: String) {
+    operator fun invoke(name: String) {
+        println("$greeting, $name!")
+    }
+}
+fun e4() {
+    val englishGreeter = Greeter("Hi")
+    englishGreeter("Mike") //<- вызов экземпляра Greeter как функции.
+    // Hi, Mike!
+
+    val predicate = SomePredicate("projectX")
+    listOf("a", "b", "projectX").filter(predicate) //<- передача экземпляра предиката
+        .let { println(it) } // [projectX]
+}
+
+class SomePredicate(val project: String)
+    : (String) -> Boolean { //Просто сокращённый синтаксис Function1
+    override fun invoke(p1: String): Boolean {
+        return project == p1
+    }
+}
+
+/**
+ * ## 11.3. Применение invoke в DSL.
+ * Часто бывает нужно, чтобы API поддерживал и вложенные блоки (1) и простые последовательности вызовов (2):
+ *
+ *      dependencies {
+ *          compile("junit:junit:4.11")
+ *      }
+ *
+ *      dependencies.compile("junit:junit:4.11")
+ *
+ * Тут dependencies - это экземпляр класса DependencyHandler, который определяет методы compile и invoke (причём invoke принимает лямбду).
+ */
+class DependencyHandler {
+    fun compile(coordinate: String) {
+        println("Added dependency on $coordinate")
+    }
+
+    operator fun invoke(
+        body: DependencyHandler.() -> Unit
+    ) {
+        body()
+    }
+}
+
+private fun e5() {
+    val dependencies = DependencyHandler()
+
+    dependencies.compile("junit:junit:4.11")
+
+    //Тк последний параметр invoke - это лямбда, можно открывать её скоуп сразу у объекта!
+    dependencies {// this: DependencyHandler <- экземпляр выступает как неявный получатель.
+        compile("junit:junit:5.11")
+    } // Added dependency on junit:junit:5.11
+}
+
 fun main() {
     e1()
     e2()
     e3()
+    e4()
+    e5()
 }
