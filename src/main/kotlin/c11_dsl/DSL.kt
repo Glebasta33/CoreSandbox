@@ -1,5 +1,8 @@
 package c11_dsl
 
+import java.time.LocalDate
+import java.time.Period
+
 /**
  * # Глава 11. Конструирование DSL (Domain Specific Languages).
  * ## 11.1. От API к DSL.
@@ -259,10 +262,84 @@ private fun e5() {
     } // Added dependency on junit:junit:5.11
 }
 
+/**
+ * ## 11.4. DSL в Kotlin на практике.
+ *
+ * ## Цепочки инфиксных вызовов: "should" в фреймворках тестирования.
+ */
+infix fun <T> T.should(matcher: Matcher<T>) = matcher.test(this)
+
+interface Matcher<T> {
+    fun test(value: T)
+}
+
+class startWith(val prefix: String) : Matcher<String> {
+    override fun test(value: String) {
+        if (!value.startsWith(prefix)){
+            throw AssertionError("String $value does not start with $prefix")
+        }
+    }
+}
+
+private fun e6() {
+    "kotlin" should startWith("kot")
+
+    "kotlin" should start with "kot"
+    "kotlin" should end with "in"
+}
+
+interface TestAction
+object start : TestAction
+object end : TestAction
+
+infix fun String.should(action: TestAction): ActionWrapper {
+    return when(action) {
+        start -> StartWrapper(this)
+        end -> EndWrapper(this)
+        else -> error("Unknown test action: $action")
+    }
+}
+
+interface ActionWrapper {
+    infix fun with(value: String)
+}
+class StartWrapper(val value: String) : ActionWrapper {
+    override infix fun with(prefix: String) {
+        if (!value.startsWith(prefix)) throw AssertionError("String $value does not start with $prefix")
+    }
+}
+
+class EndWrapper(val value: String) : ActionWrapper {
+    override infix fun with(postfix: String) {
+        if (!value.endsWith(postfix)) throw AssertionError("String $value does not end with $postfix")
+    }
+}
+
+/**
+ * Определение расширений для простых типов (примитивов).
+ */
+val Int.days: Period
+    get() = Period.ofDays(this)
+
+val Period.ago: LocalDate
+    get() = LocalDate.now() - this
+
+val Period.fromNow: LocalDate
+    get() = LocalDate.now() + this
+
+private fun e7() {
+    val yesterday = 1.days.ago
+    val tomorrow = 1.days.fromNow
+
+    println("$yesterday -> $tomorrow") //2024-02-02 -> 2024-02-04
+}
+
 fun main() {
     e1()
     e2()
     e3()
     e4()
     e5()
+    e6()
+    e7()
 }
