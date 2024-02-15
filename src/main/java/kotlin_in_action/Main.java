@@ -1,6 +1,6 @@
 package kotlin_in_action;
 
-import c2_basics.Person2;
+import kotlin_lang.kotlin_in_action._2_basics.Person2;
 
 public class Main {
     public static void main(String[] args) {
