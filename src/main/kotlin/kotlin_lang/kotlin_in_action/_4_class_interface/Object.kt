@@ -101,9 +101,9 @@ interface JSONFactory<T> {
 }
 
 class PersonWithCompanion(val name: String) {
-    companion object : JSONFactory<PersonWithCompanion> {
-        override fun fromJSON(jsonText: String): PersonWithCompanion {
-            TODO("Not yet implemented")
+    companion object : JSONFactory<PersonWithCompanion?> {
+        override fun fromJSON(jsonText: String): PersonWithCompanion? {
+             return null
         }
     }
 }

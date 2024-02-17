@@ -43,7 +43,7 @@ val <T> List<T>.penultimate: T
  * - нельзя сохранить несколько значений разных типов в свойстве класса.
  */
 class Bar {
-   // val <T> x: T = TODO() // ERROR: Type parameter of a property must be used in its receiver type
+   // val <T> x: T =
 }
 
 /**

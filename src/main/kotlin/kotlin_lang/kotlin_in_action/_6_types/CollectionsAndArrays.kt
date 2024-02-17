@@ -29,12 +29,11 @@ fun main() {
      */
     class MutableParser : DataParserJava {
         override fun <T : Any?> parseData(input: String?, output: MutableList<T>, errors: MutableList<String?>) {
-            TODO("Not yet implemented")
+
         }
     }
     class ImmutableParser : DataParserJava {
         override fun <T : Any?> parseData(input: String, output: List<T>, errors: List<String>) {
-            TODO("Not yet implemented")
         }
     }
 
