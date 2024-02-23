@@ -1,4 +1,4 @@
-package multithreading.coroutines.androidbroadcast._channels
+package multithreading.coroutines.androidbroadcast._5_channels
 
 import kotlinx.coroutines.*
 import kotlinx.coroutines.channels.*
