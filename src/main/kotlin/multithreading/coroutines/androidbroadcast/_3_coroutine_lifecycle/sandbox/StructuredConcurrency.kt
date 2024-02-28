@@ -2,7 +2,7 @@ package multithreading.coroutines.androidbroadcast._3_coroutine_lifecycle.sandbo
 
 import kotlinx.coroutines.*
 
-val rootScope = CoroutineScope(CoroutineName("Root scope"))
+private val rootScope = CoroutineScope(CoroutineName("Root scope"))
 
 fun main(): Unit = runBlocking {
 
