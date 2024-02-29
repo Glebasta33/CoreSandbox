@@ -16,7 +16,7 @@ import kotlinx.coroutines.delay
  *
  * Пример ("а" вызывает "b", которая вызывает "c"):
  */
-suspend fun a() {
+suspend fun a() { //TODO: Написать реализацию suspend-функций с 3-мя уровнями вложенности
     val user = readUser()
     b()
     b()
