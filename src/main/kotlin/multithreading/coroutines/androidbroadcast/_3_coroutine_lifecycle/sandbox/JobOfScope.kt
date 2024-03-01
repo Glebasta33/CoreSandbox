@@ -4,7 +4,7 @@ import kotlinx.coroutines.*
 
 //DONE: Посмотреть, есть ли дефолтный Job у скоупа, и можно ли через него получить доступ к дочерним джобам.
 
-val parentScope = CoroutineScope(CoroutineName("Parent scope"))
+private val parentScope = CoroutineScope(CoroutineName("Parent scope"))
 
 suspend fun main() {
     val parentJob = parentScope.coroutineContext.job
