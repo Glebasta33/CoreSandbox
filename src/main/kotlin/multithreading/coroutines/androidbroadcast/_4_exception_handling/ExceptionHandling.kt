@@ -73,7 +73,7 @@ import kotlinx.coroutines.*
  *     }
  *     job.join()
  *
- * Отмена - это тоже ошибка. //TODO: Протестить отмену корутин в Structured Concurrency + сравнить с простыми исключениями
+ * Отмена - это тоже ошибка.
  * Остановка корутины происходит с помощью специального исключения - CancellationException.
  * Вызов cancel() у job или scope создаёт и выбрасывает экземпляр CancellationException.
  * Но его обработка происходит иначе - и этот код зашит в корутины и не может быть изменён.
@@ -83,7 +83,7 @@ import kotlinx.coroutines.*
  * CoroutineExceptionHandler.
  * CoroutineExceptionHandler позволяет определить поведение для всех необработанных исключений,
  * которые происходят в текущем контексте выполнения корутин.
- * Выполняется в последнюю очередь, не выполняется при CancellationException. //TODO: Проверить как отрабатывает CoroutineExceptionHandler при CancellationException
+ * Выполняется в последнюю очередь, не выполняется при CancellationException.
  *
  * Выполнение finally.
  * В случае, если корутина завершается с ошибкой или при отмене через cancel(), то выполнить в ней
