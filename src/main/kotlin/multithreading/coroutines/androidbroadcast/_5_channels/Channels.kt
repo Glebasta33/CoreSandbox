@@ -26,7 +26,7 @@ import java.util.concurrent.BlockingQueue
  * (Но будет работать только с Channel.BUFFERED)
  *
  * Закрываем канал.
- * По умолчанию канал будет работать пока не будет закрыт с помощью вызова функции Channel.close(cause: Throwable? = null): Boolean
+ * По умолчанию канал будет работать пока не будет закрыт с помощью вызова функции Channel.close(cause: Throwable? = null): Boolean //TODO: Потестировать канал (с закрытием и без).
  * При попытке считать значение из закрытого канала будет выброшено исключение - ClosedReceiveChannelException.
  * Можно проверить доступен ли канал для отправки или получения данных через поля Channel.isClosedForSend и Channel.isClosedForReceive.
  *
