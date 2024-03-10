@@ -34,7 +34,7 @@ import kotlin.system.measureTimeMillis
  * (вообще такой подход рекомендуем в Kotlin: создать простейший интерфейс и дальше расширять его extension-функциями).
  *
  * ## Flow Builders.
- * Функция, которые создают Flow, называются Flow Builders.
+ * Функции, которые создают Flow, называются Flow Builders.
  * flowOf(...), flow { ... }, ...
  *
  * ## Преобразование Flow.
