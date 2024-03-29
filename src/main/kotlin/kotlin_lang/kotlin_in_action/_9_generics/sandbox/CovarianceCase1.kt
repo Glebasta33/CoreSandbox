@@ -1,10 +1,10 @@
 package kotlin_lang.kotlin_in_action._9_generics.sandbox
 
-private interface Loot {
+interface Loot {
     fun fetchWeight(): Float
 }
 
-private class Weapon(
+class Weapon(
     private val name: String,
     val weight: Float,
     private var sharpness: Int
@@ -14,10 +14,10 @@ private class Weapon(
 }
 
 private class Box<out T : Loot>(initialLoot: List<T>) {
-    private val loot = initialLoot.toMutableList()
+    private val loot: List<T> = initialLoot
     val size: Int
         get() = loot.size
-    fun getLootByIndex(index: Int) = loot[index]
+    fun getLootByIndex(index: Int): T = loot[index] //<- исходящая позиция (out)
 }
 
 fun main() {
