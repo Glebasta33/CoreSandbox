@@ -1,6 +1,11 @@
 package kotlin_lang.kotlin_in_action._8_high_order_functions
 
 /**
+ * ## Статьи для изучения:
+ * TODO: Context receivers — новые extension functions - https://habr.com/ru/companies/ozontech/articles/802641/
+ */
+
+/**
  * # 8. Функции высшего порядка: лямбда-выражения как параметры.
  * ## 8.1. Объявление функции высшего порядка.
  * Функции высшего порядка - это функции, которые принимают другие функции в аргументах и/или возвращают их.
