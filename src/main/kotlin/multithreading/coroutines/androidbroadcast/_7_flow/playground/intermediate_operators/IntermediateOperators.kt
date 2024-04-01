@@ -1,4 +1,4 @@
-package multithreading.coroutines.androidbroadcast._7_flow.playground
+package multithreading.coroutines.androidbroadcast._7_flow.playground.intermediate_operators
 
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.transform
