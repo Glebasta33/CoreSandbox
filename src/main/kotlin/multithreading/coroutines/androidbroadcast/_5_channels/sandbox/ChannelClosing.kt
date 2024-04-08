@@ -26,7 +26,7 @@ fun main(): Unit = runBlocking {
     try {
         channel.receive()
     } catch (e: ClosedReceiveChannelException) {
-        println(e.message)
+        println("Error: ${e.message}")
     }
 
 }
