@@ -4,7 +4,7 @@ import kotlinx.coroutines.FlowPreview
 import kotlinx.coroutines.flow.debounce
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.runBlocking
-import multithreading.coroutines.deepdive._1_understanding_coroutines.delay
+import coroutines.coroutines_deepdive._1_understanding_coroutines.delay
 
 /**
  * debounce отфильтровывает все элементы, которые эмиттятся чаще, чем установленный таймаут.
