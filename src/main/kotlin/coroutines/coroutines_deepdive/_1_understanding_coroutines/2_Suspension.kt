@@ -28,6 +28,9 @@ import kotlin.coroutines.suspendCoroutine
  *
  * Пример прерывания: код приостановится после println("Before")
  * но не будет завершён.
+ *
+ * P.S. Функция suspendCoroutine преобразует асинхронный вызов в suspend-функцию, используя явный callback и Continuation.
+ * Но во все либах это уже реализовано под капотом (Retrofit, Room), поэтому большинство фичёвый разрабов ею не пользуются!
  */
 suspend fun e1() {
     println("Before")
@@ -162,6 +165,7 @@ suspend fun e7() {
  * suspend-функции - это не корутины, а просто функции, которые могут приостанавливать корутины.
  */
 var continuation: Continuation<Unit>? = null // так не стоит делать из-за потенциальных утечек памяти
+
 suspend fun suspendAndSetContinuation() {
     suspendCoroutine<Unit> { cont ->
         continuation = cont

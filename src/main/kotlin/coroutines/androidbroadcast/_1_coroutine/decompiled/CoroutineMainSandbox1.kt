@@ -1,4 +1,4 @@
-package coroutines.androidbroadcast._1_coroutine
+package coroutines.androidbroadcast._1_coroutine.decompiled
 
 import kotlinx.coroutines.*
 import kotlin.random.Random
