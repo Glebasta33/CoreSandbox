@@ -19,13 +19,13 @@ import kotlinx.coroutines.delay
  *
  *          $continuation = new ContinuationImpl($completion) { // Создаётся анонимный класс для Continuation suspend-функции и оборачивает параметр Continuation $completion. Но сначала идёт проверка, не обёрнута ли Continuation уже (см. выше).
  *             // $FF: synthetic field
- *             Object result; // Данные
- *             int label; // Идентификатор текущего шага в стейт-машине
+ *             Object result; // Добавляется поле для хранения локального состояния.
+ *             int label; // Добавляется поле с индексом текущего шага в стейт-машине.
  *
  *             @Nullable
  *             public final Object invokeSuspend(@NotNull Object $result) {
  *                this.result = $result;
- *                this.label |= Integer.MIN_VALUE;
+ *                this.label |= Integer.MIN_VALUE; // label начинается с 0.
  *                return SimpleSuspendFunctionKt.myFunction((Continuation)this);
  *             }
  *          };
@@ -40,7 +40,7 @@ import kotlinx.coroutines.delay
  *             ResultKt.throwOnFailure($result);
  *             var1 = "Before";
  *             System.out.println(var1);
- *             ((<undefinedtype>)$continuation).label = 1;
+ *             ((<undefinedtype>)$continuation).label = 1; // Меняется поля объекта Continuation! Увеличение лейбла.
  *             if (DelayKt.delay(1000L, (Continuation)$continuation) == var4) { // Важный момент - проверка: если delay вернул COROUTINE_SUSPENDED, то текущая suspend-функция возвращает COROUTINE_SUSPENDED! Аналогичные проверки есть у всех suspend-функций!
  *                return var4; // Возвращается маркер COROUTINE_SUSPENDED!
  *             }
