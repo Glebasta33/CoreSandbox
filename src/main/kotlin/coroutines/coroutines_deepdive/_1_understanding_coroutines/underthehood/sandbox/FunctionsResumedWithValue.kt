@@ -1,6 +1,9 @@
 package coroutines.coroutines_deepdive._1_understanding_coroutines.underthehood.sandbox
 
+import kotlinx.coroutines.async
+import kotlinx.coroutines.coroutineScope
 import kotlinx.coroutines.delay
+import kotlinx.coroutines.runBlocking
 
 /**
  * printUser под капотом:
@@ -123,6 +126,10 @@ suspend fun printUser(token: String) {
 
 suspend fun getUserId(token: String): String {
     delay(1000)
+    runBlocking {  }
+    coroutineScope {
+        async {  }
+    }.await()
     return "uid-123243"
 }
 
