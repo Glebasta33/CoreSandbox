@@ -1,4 +1,4 @@
-package coroutines.coroutines_deepdive._3_channel_and_flow.channel_types
+package coroutines.coroutines_deepdive._3_channel_and_flow.channel
 
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.channels.Channel
