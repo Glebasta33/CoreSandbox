@@ -3,6 +3,7 @@ package coroutines.coroutines_deepdive._3_channel_and_flow.builders
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.asFlow
 
+// Mac test
 suspend fun main() {
     listOf(1, 2, 3, 4, 5)
         // or setOf(...), or sequenceOf(...)
